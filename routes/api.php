@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FlightController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,12 +21,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 // Flights CRUD ;
-Route::get('flights', [FlightController::class, 'index']);
+Route::get('/flights', [FlightController::class, 'index']);
 Route::get('flights/{id}', [FlightController::class, 'show']);
 Route::post('flights', [FlightController::class, 'store']);
 Route::put('flights/{id}', [FlightController::class, "update"] ) ;
 Route::delete('flights/{id}', [FlightController::class, "destroy"] ) ;
-
 
 Route::get('/flights/from/{from}/to/{to}', [FlightController::class, 'searchByFromTo']);
 
