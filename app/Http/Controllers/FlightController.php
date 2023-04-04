@@ -25,6 +25,7 @@ class FlightController extends Controller
      */
     public function store(Request $request)
     {
+        // return response()->json($request) ;
         $flight = Flight::create($request->all());
 
         return response()->json($flight, 201);
@@ -108,6 +109,12 @@ class FlightController extends Controller
     public function cheapestFlights()
     {
         $flights = Flight::where('price', '<', 500)->get();
+        return response()->json($flights);
+    }
+
+    public function searchByPrice($price)
+    {
+        $flights = Flight::where('price', '=', $price)->get();
         return response()->json($flights);
     }
 

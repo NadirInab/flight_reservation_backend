@@ -26,6 +26,7 @@ class FlightFactory extends Factory
             'airport' => $this->faker->text(10),
             'airline' => $this->faker->text(15),
             'aircraft' => $this->faker->regexify('[A-Z]{3}-\d{3}'),
+            'image' => $this->faker->text(10),
             'price' => $this->faker->randomFloat(2, 100, 1000),
             'number_of_seats' => $this->faker->numberBetween(50, 300),
         ];

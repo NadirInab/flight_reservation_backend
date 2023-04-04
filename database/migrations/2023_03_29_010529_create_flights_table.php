@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('airport');
             $table->string('airline');
             $table->string('aircraft');
+            $table->string('image')->default('default.jpg');
             $table->decimal('price', 8, 2);
             $table->integer('number_of_seats');
             $table->timestamps();
