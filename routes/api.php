@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FlightController;
+// use App\Http\Controllers\FlightController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,10 +16,20 @@ use App\Http\Controllers\FlightController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    // protected routes here
 });
+
+// Registration Routes : 
+Route::post('/register', [AuthController::class, 'register']);
+// Authentication endpoints
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 
 // Flights CRUD ;
@@ -27,10 +39,11 @@ Route::post('flights', [FlightController::class, 'store']);
 Route::put('flights/{id}', [FlightController::class, "update"] ) ;
 Route::delete('flights/{id}', [FlightController::class, "destroy"] ) ;
 
+// Route::resource("flights", "FlightController") ;
 Route::get('/flights/from/{from}/to/{to}', [FlightController::class, 'searchByFromTo']);
-
 Route::get('/flights/date/{date}', [FlightController::class, 'searchByDate']);
 
+Route::get('/flights/price/{price}', [FlightController::class, 'searchByPrice']);
 Route::get('/flights/price/cheapest', [FlightController::class, 'cheapestFlights']);
-
 Route::get('/flights/airport/{airport}', [FlightController::class, 'getByAirport']);
+
