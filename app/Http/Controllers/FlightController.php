@@ -76,9 +76,13 @@ class FlightController extends Controller
      */
     public function destroy($id)
     {
-        Flight::findOrFail($id)->delete();
-
-        return response()->json(null, 204);
+        $flight = Flight::findOrFail($id);
+        $flight->delete();
+        // return "HJHJHJH" ;
+        return response()->json([
+            $flight,
+            204
+        ]);
     }
 
 
@@ -105,6 +109,18 @@ class FlightController extends Controller
             ->get();
     }
 
+    /**
+     * get From  and To the form 
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function searchByFromToDate($from, $to, $date)
+    {
+        return Flight::where('from', $from)
+            ->where('to', $to)->where('date', $date)
+            ->get();
+    }
+
 
     public function cheapestFlights()
     {
@@ -121,7 +137,7 @@ class FlightController extends Controller
 
     public function getByAirport($airport)
     {
-        $flights = Flight::where('airport', 'LIKE',"%$airport%")->get();
+        $flights = Flight::where('airport', 'LIKE', "%$airport%")->get();
         return response()->json($flights);
     }
 }
