@@ -17,7 +17,7 @@ class FlightController extends Controller
     {
         return Flight::join('cities as from_city', 'flights.from', '=', 'from_city.cityName')
             ->join('cities as to_city', 'flights.to', '=', 'to_city.cityName')
-            ->select('flights.id', 'flights.flight_name', 'flights.date', 'flights.airline', "flights.price", 'from_city.cityName as from_city', 'from_city.airport as from_airport', 'from_city.cityImage as from_image', 'to_city.cityName as to_city', 'to_city.airport as to_airport', 'to_city.cityImage as to_image')
+            ->select('flights.id', 'flights.flight_name', 'flights.date', 'flights.airline', "flights.price", "flights.number_of_seats", 'from_city.cityName as from_city', 'from_city.airport as from_airport', 'from_city.cityImage as from_image', 'to_city.cityName as to_city', 'to_city.airport as to_airport', 'to_city.cityImage as to_image')
             ->get();
     }
 
@@ -29,8 +29,13 @@ class FlightController extends Controller
      */
     public function store(Request $request)
     {
-        $fromCity = City::firstOrCreate(['cityName' => $request->from_city], ['airport' => $request->from_airport, 'cityImage' => $request->from_image]);
-        $toCity = City::firstOrCreate(['cityName' => $request->to_city], ['airport' => $request->to_airport, 'cityImage' => $request->to_image]);
+        $img1 = $request->file("from_image")->getClientOriginalName();
+        $img2 = $request->file("to_image")->getClientOriginalName();
+        $fromCity = City::firstOrCreate(['cityName' => $request->from_city], ['airport' => $request->from_airport, 'cityImage' => $img1]);
+        $toCity = City::firstOrCreate(['cityName' => $request->to_city], ['airport' => $request->to_airport, 'cityImage' => $img2]);
+        $request->file("from_image")->move(public_path('images'), $img1);
+        $request->file("to_image")->move(public_path('images'), $img2);
+
         $flight = new Flight([
             'flight_name' => $request->flight_name,
             'date' => $request->date,
@@ -39,11 +44,10 @@ class FlightController extends Controller
             'number_of_seats' => $request->seats,
             'price' => $request->price
         ]);
-
         $flight->departureCity()->associate($fromCity);
         $flight->arrivalCity()->associate($toCity);
-
         $flight->save();
+        
         return response()->json($flight);
     }
 

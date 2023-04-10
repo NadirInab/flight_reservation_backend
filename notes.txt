@@ -53,3 +53,9 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logged out'], 200);
     }
 }
+============>
+
+
+$img1 = $request->file("from_image");
+        $extension = $img1->getClientOriginalExtension();
+        // return $extension ;
