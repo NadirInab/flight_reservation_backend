@@ -39,8 +39,7 @@ Route::post('flights', [FlightController::class, 'store']);
 Route::put('flights/{id}', [FlightController::class, "update"] ) ;
 Route::delete('flights/{id}', [FlightController::class, "destroy"] ) ;
 
-// Route::resource("flights", "FlightController") ;
-Route::get('/flights/from/{from}/to/{to}', [FlightController::class, 'searchByFromTo']);
+Route::get('/flights/{from}/{to}/{date}', [FlightController::class, 'searchByFromToDate']);
 Route::get('/flights/date/{date}', [FlightController::class, 'searchByDate']);
 
 Route::get('/flights/price/{price}', [FlightController::class, 'searchByPrice']);

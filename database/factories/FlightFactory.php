@@ -20,7 +20,7 @@ class FlightFactory extends Factory
     {
         return [
             'flight_name' => $this->faker->name,
-            'date' => $this->faker->dateTimeBetween('now', '+1 year')->format('Y-m-d'),
+            'date' => $this->faker->dateTimeBetween('now', '+1 year')->format('Y-m-d H:i:s'),
             'from' => $this->faker->text(5),
             'to' => $this->faker->text(5),
             'airport' => $this->faker->text(10),
