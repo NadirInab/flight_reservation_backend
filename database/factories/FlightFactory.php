@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\City;
 use App\Models\Flight;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,15 +19,17 @@ class FlightFactory extends Factory
      */
     public function definition()
     {
+        $cities = City::pluck('cityName')->toArray();
+        $from = $this->faker->randomElement($cities);
+        $to = $this->faker->randomElement(array_diff($cities, [$from]));
+
         return [
             'flight_name' => $this->faker->name,
+            "from" => $from,
+            "to" => $to,
             'date' => $this->faker->dateTimeBetween('now', '+1 year')->format('Y-m-d H:i:s'),
-            'from' => $this->faker->text(5),
-            'to' => $this->faker->text(5),
-            'airport' => $this->faker->text(10),
             'airline' => $this->faker->text(15),
             'aircraft' => $this->faker->regexify('[A-Z]{3}-\d{3}'),
-            'image' => $this->faker->text(10),
             'price' => $this->faker->randomFloat(2, 100, 1000),
             'number_of_seats' => $this->faker->numberBetween(50, 300),
         ];

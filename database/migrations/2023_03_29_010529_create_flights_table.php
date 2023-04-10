@@ -16,15 +16,16 @@ return new class extends Migration
         Schema::create('flights', function (Blueprint $table) {
             $table->id();
             $table->string('flight_name');
+            $table->string('from', 30);
+            $table->string('to', 30);
             $table->timestamp('date');
-            $table->string('from');
-            $table->string('to');
-            $table->string('airport');
-            $table->string('airline');
-            $table->string('aircraft');
-            $table->string('image')->default('default.jpg');
             $table->decimal('price', 8, 2);
             $table->integer('number_of_seats');
+            $table->string('airline');
+            $table->string('aircraft');
+            $table->foreign('from')->references('cityName')->on('cities')->onDelete("cascade");
+            $table->foreign('to')->references('cityName')->on('cities')->onDelete("cascade");
+
             $table->timestamps();
         });
     }

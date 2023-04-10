@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
 use App\Models\Flight;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,10 @@ class FlightController extends Controller
      */
     public function index()
     {
-        return Flight::all();
+        return Flight::join('cities as from_city', 'flights.from', '=', 'from_city.cityName')
+            ->join('cities as to_city', 'flights.to', '=', 'to_city.cityName')
+            ->select('flights.id', 'flights.flight_name', 'flights.date', 'flights.airline', "flights.price", 'from_city.cityName as from_city', 'from_city.airport as from_airport', 'from_city.cityImage as from_image', 'to_city.cityName as to_city', 'to_city.airport as to_airport', 'to_city.cityImage as to_image')
+            ->get();
     }
 
     /**
@@ -25,10 +29,22 @@ class FlightController extends Controller
      */
     public function store(Request $request)
     {
-        // return response()->json($request) ;
-        $flight = Flight::create($request->all());
+        $fromCity = City::firstOrCreate(['cityName' => $request->from_city], ['airport' => $request->from_airport, 'cityImage' => $request->from_image]);
+        $toCity = City::firstOrCreate(['cityName' => $request->to_city], ['airport' => $request->to_airport, 'cityImage' => $request->to_image]);
+        $flight = new Flight([
+            'flight_name' => $request->flight_name,
+            'date' => $request->date,
+            'airline' => $request->airline,
+            'aircraft' => $request->aircraft,
+            'number_of_seats' => $request->seats,
+            'price' => $request->price
+        ]);
 
-        return response()->json($flight, 201);
+        $flight->departureCity()->associate($fromCity);
+        $flight->arrivalCity()->associate($toCity);
+
+        $flight->save();
+        return response()->json($flight);
     }
 
     /**
@@ -39,7 +55,7 @@ class FlightController extends Controller
      */
     public function show($id)
     {
-        return Flight::findOrFail($id);
+        return Flight::with("city")->findOrFail($id);
     }
 
     /**
@@ -78,35 +94,10 @@ class FlightController extends Controller
     {
         $flight = Flight::findOrFail($id);
         $flight->delete();
-        // return "HJHJHJH" ;
         return response()->json([
             $flight,
             204
         ]);
-    }
-
-
-    /**
-     * show by date 
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function searchByDate($date)
-    {
-        return Flight::where('date', $date)->get();
-    }
-
-
-    /**
-     * get From  and To the form 
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function searchByFromTo($from, $to)
-    {
-        return Flight::where('from', $from)
-            ->where('to', $to)
-            ->get();
     }
 
     /**
@@ -117,27 +108,35 @@ class FlightController extends Controller
     public function searchByFromToDate($from, $to, $date)
     {
         return Flight::where('from', $from)
-            ->where('to', $to)->where('date', $date)
+            ->where('to', $to)
+            ->whereDate('date', $date)
             ->get();
     }
 
 
     public function cheapestFlights()
     {
-        $flights = Flight::where('price', '<', 500)->get();
+        $flights = Flight::where('price', '<', 400)->get();
         return response()->json($flights);
     }
 
-    public function searchByPrice($price)
-    {
-        $flights = Flight::where('price', '=', $price)->get();
-        return response()->json($flights);
-    }
 
 
     public function getByAirport($airport)
     {
         $flights = Flight::where('airport', 'LIKE', "%$airport%")->get();
+        return response()->json($flights);
+    }
+
+
+    public function getCity()
+    {
+        // $flights = Flight::all() ;
+        $flights = Flight::join('cities as departure', 'flights.from', '=', 'departure.cityName')
+            ->join('cities as arrival', 'flights.to', '=', 'arrival.cityName')
+            ->select('flights.flight_name', 'flights.date', 'departure.cityName as departure_city', 'departure.image as departure_image', 'arrival.cityName as arrival_city', 'arrival.image as arrival_image')
+            ->get();
+
         return response()->json($flights);
     }
 }

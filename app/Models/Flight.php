@@ -12,12 +12,19 @@ class Flight extends Model
     protected $fillable = [
         'flight_name',
         'date',
-        'from',
-        'to',
-        'airport',
         'airline',
         'aircraft',
         'price',
         'number_of_seats',
     ];
+    
+    public function departureCity()
+    {
+        return $this->belongsTo(City::class, 'from', 'cityName');
+    }
+
+    public function arrivalCity()
+    {
+        return $this->belongsTo(City::class, 'to', 'cityName');
+    }
 }

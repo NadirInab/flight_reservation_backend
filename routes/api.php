@@ -44,5 +44,6 @@ Route::get('/flights/date/{date}', [FlightController::class, 'searchByDate']);
 
 Route::get('/flights/price/{price}', [FlightController::class, 'searchByPrice']);
 Route::get('/flights/price/cheapest', [FlightController::class, 'cheapestFlights']);
-Route::get('/flights/airport/{airport}', [FlightController::class, 'getByAirport']);
+
+Route::get('/flights/city', [FlightController::class, 'getCity']);
 
