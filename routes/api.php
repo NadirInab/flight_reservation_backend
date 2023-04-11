@@ -4,6 +4,9 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FlightController;
+use App\Http\Controllers\TicketController;
+use App\Http\Controllers\UserController;
+
 // use App\Http\Controllers\FlightController;
 
 /*
@@ -40,11 +43,19 @@ Route::post('flights', [FlightController::class, 'store']);
 Route::put('flights/{id}', [FlightController::class, "update"] ) ;
 Route::delete('flights/{id}', [FlightController::class, "destroy"] ) ;
 
+
 Route::get('/flights/{from}/{to}/{date}', [FlightController::class, 'searchByFromToDate']);
 Route::get('/flights/date/{date}', [FlightController::class, 'searchByDate']);
-
 Route::get('/flights/price/{price}', [FlightController::class, 'searchByPrice']);
 Route::get('/flights/price/cheapest', [FlightController::class, 'cheapestFlights']);
-
 Route::get('/flights/city', [FlightController::class, 'getCity']);
 
+
+Route::get("/flights/tickets", [TicketController::class, 'index']) ;
+Route::get("/flights/test", [TicketController::class, 'test']) ;
+
+// admin Get list of user /
+Route::resource('users', UserController::class)->except([
+    'store'
+]);
+Route::get("users/count", [UserController::class, "count"]) ;

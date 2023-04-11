@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Ticket;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Flight extends Model
 {
@@ -17,7 +18,7 @@ class Flight extends Model
         'price',
         'number_of_seats',
     ];
-    
+
     public function departureCity()
     {
         return $this->belongsTo(City::class, 'from', 'cityName');
@@ -26,5 +27,10 @@ class Flight extends Model
     public function arrivalCity()
     {
         return $this->belongsTo(City::class, 'to', 'cityName');
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
     }
 }
