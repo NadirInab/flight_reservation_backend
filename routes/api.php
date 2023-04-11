@@ -32,6 +32,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 
+
 // Flights CRUD ;
 Route::get('/flights', [FlightController::class, 'index']);
 Route::get('flights/{id}', [FlightController::class, 'show']);

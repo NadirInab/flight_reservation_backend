@@ -115,6 +115,11 @@ class FlightController extends Controller
             ->where('to', $to)
             ->whereDate('date', $date)
             ->get();
+
+        //    return Flight::join('cities as from_city', 'flights.from', '=', 'from_city.cityName')
+        //     ->join('cities as to_city', 'flights.to', '=', 'to_city.cityName')
+        //     ->select('flights.id', 'flights.flight_name', 'flights.date', 'flights.airline', "flights.price", "flights.number_of_seats", 'from_city.cityName as from_city', 'from_city.airport as from_airport', 'to_city.cityName as to_city', 'to_city.airport as to_airport')
+        //     ->get();
     }
 
 
