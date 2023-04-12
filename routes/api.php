@@ -52,11 +52,11 @@ Route::get('/flights/price/cheapest', [FlightController::class, 'cheapestFlights
 Route::get('/flights/city', [FlightController::class, 'getCity']);
 
 
-Route::get("/flights/tickets", [TicketController::class, 'index']) ;
-Route::get("/flights/test", [TicketController::class, 'test']) ;
+Route::get("tickets", [TicketController::class, 'index']) ;
+Route::post("tickets", [TicketController::class, 'store']) ;
 
 // admin Get list of user /
 Route::resource('users', UserController::class)->except([
     'store'
 ]);
-Route::get("users/countUsers", [UserController::class, "countUsers"]) ;
+Route::get("countUsers", [UserController::class, "countUsers"]) ;

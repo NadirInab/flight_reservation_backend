@@ -10,6 +10,11 @@ class Ticket extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        "flight_id", 
+        "user_id"
+    ] ;
+
     public function flight(){
         return $this->belongsTo(Flight::class) ;
     }
