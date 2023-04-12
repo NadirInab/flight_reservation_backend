@@ -148,4 +148,15 @@ class FlightController extends Controller
 
         return response()->json($flights);
     }
+
+     /**
+     * Count the number of users in the database.
+     *
+     * @return int
+     */
+    public function CountFlights()
+    {
+        $CountFlights = Flight::count();
+        return response()->json(['count' => $CountFlights]);
+    }
 }

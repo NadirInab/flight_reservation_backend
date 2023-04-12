@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::withCount('tickets')->get();
         return response()->json(['users' => $users], 200);
     }
 
@@ -69,9 +69,14 @@ class UserController extends Controller
         return response()->json(null, 204);
     }
 
-    public function count(){
-        $count = 12 ;
-        // User::count() 
-        return response()->json($count) ;
+     /**
+     * Count the number of users in the database.
+     *
+     * @return int
+     */
+    public function countUsers()
+    {
+        $userCount = User::count();
+        return response()->json(['count' => $userCount]);
     }
 }

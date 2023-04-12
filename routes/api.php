@@ -42,6 +42,7 @@ Route::get('flights/{id}', [FlightController::class, 'show']);
 Route::post('flights', [FlightController::class, 'store']);
 Route::put('flights/{id}', [FlightController::class, "update"] ) ;
 Route::delete('flights/{id}', [FlightController::class, "destroy"] ) ;
+Route::delete('flights/count', [FlightController::class, "CountFlights"] ) ;
 
 
 Route::get('/flights/{from}/{to}/{date}', [FlightController::class, 'searchByFromToDate']);
@@ -58,4 +59,4 @@ Route::get("/flights/test", [TicketController::class, 'test']) ;
 Route::resource('users', UserController::class)->except([
     'store'
 ]);
-Route::get("users/count", [UserController::class, "count"]) ;
+Route::get("users/countUsers", [UserController::class, "countUsers"]) ;
