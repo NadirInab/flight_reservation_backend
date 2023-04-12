@@ -11,7 +11,6 @@ class TicketController extends Controller
     {
         $tickets = Ticket::with('user', 'flight')->get();
         return response()->json($tickets);
-        // return response()->json(["hii"]) ;
     }
 
     public function store(Request $request)
@@ -30,5 +29,15 @@ class TicketController extends Controller
             'message' => 'Ticket has been booked successfully',
             'ticket' => $ticket
         ]);
+    }
+
+    public function ticketsCount(){
+        $ticketsCount = Ticket::count() ;
+        return response()->json(["ticketsCount" => $ticketsCount]) ;
+    }
+
+    public function getUserTickets($id){
+        $userTicket = Ticket::where("user_id" , $id)->get() ;
+        return response()->json(["userTicket" => $userTicket]) ;
     }
 }

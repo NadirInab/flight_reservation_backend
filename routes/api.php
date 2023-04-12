@@ -53,7 +53,10 @@ Route::get('/flights/city', [FlightController::class, 'getCity']);
 
 
 Route::get("tickets", [TicketController::class, 'index']) ;
+Route::get("ticketsCount", [TicketController::class, 'ticketsCount']) ;
+Route::get("getUserTickets/{id}", [TicketController::class, 'getUserTickets']) ;
 Route::post("tickets", [TicketController::class, 'store']) ;
+
 
 // admin Get list of user /
 Route::resource('users', UserController::class)->except([
