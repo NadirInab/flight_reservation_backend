@@ -111,7 +111,7 @@ class FlightController extends Controller
      */
     public function searchByFromToDate($from, $to, $date)
     {
-        return Flight::where('from', $from)
+        return Flight::with("departureCity")->where('from', $from)
             ->where('to', $to)
             ->whereDate('date', $date)
             ->get();

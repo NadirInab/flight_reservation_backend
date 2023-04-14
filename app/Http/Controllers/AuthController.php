@@ -12,7 +12,6 @@ class AuthController extends Controller
     // Registration
     public function register(Request $request)
     {
-        // return $request ;
         $validatedData = $request->validate([
             'name' => 'required|max:255',
             'email' => 'required|email|unique:users',
@@ -33,8 +32,6 @@ class AuthController extends Controller
         ] ;
 
         return response($response, 201) ;
-
-        // return response()->json(['token' => $token], 201);
     }
 
     // Authentication
