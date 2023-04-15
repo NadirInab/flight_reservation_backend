@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-// use App\Models\Flight;
+use App\Models\City;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-class FlightSeeder extends Seeder
+class CitySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,8 +15,6 @@ class FlightSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\Flight::factory()
-        ->count(5)
-        ->create();
+        City::factory(5)->create() ;
     }
 }

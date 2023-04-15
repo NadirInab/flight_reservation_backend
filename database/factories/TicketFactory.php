@@ -20,7 +20,7 @@ class TicketFactory extends Factory
     {
         return [
             'flight_id' => Flight::factory(),
-            'passenger_id' => User::factory(),
+            'user_id' => User::factory(),
         ];
     }
 }

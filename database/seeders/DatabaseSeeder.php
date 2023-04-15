@@ -14,9 +14,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\User::factory(10)->create();
-        \App\Models\City::factory(10)->create();
-        \App\Models\Flight::factory(10)->create();
-        \App\Models\Ticket::factory(10)->create();
+        // \App\Models\User::factory(10)->create();
+        // \App\Models\City::factory(10)->create();
+        // \App\Models\Flight::factory(10)->create();
+        // \App\Models\Ticket::factory(10)->create();
+        $this->call([
+            RolesAndPermissionsSeeder::class,
+            UserSeeder::class, 
+            CitySeeder::class,
+            FlightSeeder::class, 
+            TicketSeeder::class
+        ]) ;
     }
 }
