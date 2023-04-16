@@ -48,7 +48,7 @@ class FlightController extends Controller
         $flight->arrivalCity()->associate($toCity);
         $flight->save();
         
-        return response()->json($flight);
+        return response()->json($flight, 200);
     }
 
     /**
@@ -59,7 +59,14 @@ class FlightController extends Controller
      */
     public function show($id)
     {
-        return Flight::with("city")->findOrFail($id);
+        return Flight::join('cities as from_city', 'flights.from', '=', 'from_city.cityName')
+        ->join('cities as to_city', 'flights.to', '=', 'to_city.cityName')
+        ->select('flights.id', 'flights.flight_name', 'flights.date', 'flights.airline', "flights.price", "flights.number_of_seats", 'from_city.cityName as from_city', 'from_city.airport as from_airport', 'from_city.cityImage as from_image', 'to_city.cityName as to_city', 'to_city.airport as to_airport', 'to_city.cityImage as to_image')
+        ->where('flights.id', '=', $id)
+        ->get();
+        return response()->json([
+            "flight" => "hi", 
+        ], 200);
     }
 
     /**

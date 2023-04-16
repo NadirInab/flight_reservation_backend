@@ -59,3 +59,5 @@ class AuthController extends Controller
 $img1 = $request->file("from_image");
         $extension = $img1->getClientOriginalExtension();
         // return $extension ;
+
+        send ticket whatsapp .

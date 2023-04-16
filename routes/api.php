@@ -45,10 +45,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get("ticketsCount", [TicketController::class, 'ticketsCount']);
         Route::get("getUserTickets/{id}", [TicketController::class, 'getUserTickets']);
         Route::get("tickets", [TicketController::class, 'index']);
+        Route::delete("tickets/{id}", [TicketController::class, 'destroy']);
     });
 
     Route::middleware(['auth', 'role:passenger'])->group(function () {
-        Route::get("tickets", [TicketController::class, 'index']);
         Route::post("tickets", [TicketController::class, 'store']);
     });
 });

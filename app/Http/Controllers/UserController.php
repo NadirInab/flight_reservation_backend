@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -14,7 +15,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::withCount('tickets')->get();
+        $users = User::withCount('tickets')->with("roles")->get();
         return response()->json(['users' => $users], 200);
     }
 
@@ -40,6 +41,12 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         return response()->json(['user' => $user], 200);
+    }
+
+
+    public function getPlaintextPasswordAttribute()
+    {
+        return Hash::make($this->password);
     }
 
     /**

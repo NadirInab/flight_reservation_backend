@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 
 use Illuminate\Http\Request;
-use App\Models\User ;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -27,11 +27,11 @@ class AuthController extends Controller
         $token = $user->createToken('auth_token')->plainTextToken;
 
         $response = [
-            "user" => $user , 
+            "user" => $user,
             "token" => $token
-        ] ;
+        ];
 
-        return response($response, 201) ;
+        return response($response, 201);
     }
 
     // Authentication
@@ -47,8 +47,17 @@ class AuthController extends Controller
         }
 
         $token = auth()->user()->createToken('auth_token')->plainTextToken;
+        $user = Auth::user();
+        // $role = $user->roles->name; 
+        $role = $user->roles->pluck('name')->first();
+        // $roles = $user->roles;
+        // $roleName = $roles->first()->name;
 
-        return response()->json(['token' => $token], 200);
+        return response()->json([
+            'user' => $user,
+            'role' => $role,
+            'token' => $token
+        ], 200);
     }
 
     // Logout
@@ -58,5 +67,4 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Logged out'], 200);
     }
-
 }
