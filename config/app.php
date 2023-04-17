@@ -184,6 +184,9 @@ return [
 
         Spatie\Permission\PermissionServiceProvider::class,
 
+        // Stripe\StripeServiceProvider::class,
+
+
         /*
          * Package Service Providers...
          */
