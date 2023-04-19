@@ -9,7 +9,7 @@ class TicketController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::with('user', 'flight')->get();
+        $tickets = Ticket::with('payment','user', 'flight')->get();
         return response()->json($tickets);
     }
 

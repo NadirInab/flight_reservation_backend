@@ -11,15 +11,24 @@ class Ticket extends Model
     use HasFactory;
 
     protected $fillable = [
-        "flight_id", 
-        "user_id"
-    ] ;
+        "flight_id",
+        "user_id", 
+        "payment_id"
+    ];
 
-    public function flight(){
-        return $this->belongsTo(Flight::class) ;
+    public function flight()
+    {
+        return $this->belongsTo(Flight::class);
     }
 
-    public function user(){
-        return $this->belongsTo(User::class) ;
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
+
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class);
+    }
+
 }

@@ -2,16 +2,16 @@
 
 namespace Database\Factories;
 
-use App\Models\Flight;
 use App\Models\Payment;
-use App\Models\User ;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Ticket>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Payment>
  */
-class TicketFactory extends Factory
+class PaymentFactory extends Factory
 {
+    protected $model = Payment::class;
+
     /**
      * Define the model's default state.
      *
@@ -20,9 +20,7 @@ class TicketFactory extends Factory
     public function definition()
     {
         return [
-            'flight_id' => Flight::factory(),
-            'user_id' => User::factory(),
-            'payment_id' => Payment::factory()
+            'amount' => $this->faker->randomFloat(2, 10, 500),
         ];
     }
 }

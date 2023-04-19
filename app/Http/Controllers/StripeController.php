@@ -2,36 +2,57 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Payment;
 use Stripe\Charge;
 use Stripe\Stripe;
 use Illuminate\Http\Request;
 
 class StripeController extends Controller
 {
-    
-    public function __construct()
+
+    public function store(Request $request)
     {
-        // Set the Stripe API key
-        Stripe::setApiKey(env('STRIPE_SECRET'));
+        $payment = new Payment();
+        $payment->amount = $request->amount;
+        $payment->save();
+        return response()->json([
+            "payment" => $payment
+        ], 200);
     }
+
     public function createCharge(Request $request)
     {
-        $amount = $request->input('amount');
-        $currency = $request->input('currency');
-        $token = $request->input('stripeToken');
-
-        
-
-        Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        $parts = explode('/', $request->expiry);
+        $exp_month = (int) $parts[0];
+        $exp_year = (int) $parts[1];
+        $cardNumber = $request->cardNumber;
+        $cvv = $request->cvv;
+        $amount = $request->amount;
 
         try {
-            $charge = Charge::create([
-                'amount' => $amount,
-                'currency' => $currency,
-                'source' => $token,
+            $stripe = new \Stripe\StripeClient(
+                env('STRIPE_SECRET')
+            );
+            $res = $stripe->tokens->create([
+                'card' => [
+                    'number' => $cardNumber,
+                    'exp_month' => $exp_month,
+                    'exp_year' => $exp_year,
+                    'cvc' => $cvv,
+                ],
             ]);
-
-            return response()->json(['success' => true, 'charge' => $charge]);
+            $stripe = new \Stripe\StripeClient(
+                env('STRIPE_SECRET')
+            );
+            $response = $stripe->charges->create([
+                'amount' => $amount,
+                'currency' => 'usd',
+                'source' => $res->id,
+                'description' => "Payement is well done",
+            ]);
+            return response()->json([
+                'response' => $response->status
+            ], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'error' => $e->getMessage()]);
         }

@@ -20,14 +20,14 @@ use App\Http\Controllers\UserController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
 
-
-Route::group(['middleware' => 'auth:sanctum'], function () {
-    // protected routes here
-});
+// Route::group(['middleware' => 'auth:sanctum'], function () {
+//     // protected routes here
+// });
 
 // Registration Routes : 
 Route::post('/register', [AuthController::class, 'register']);
@@ -37,7 +37,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 
 
 Route::middleware(['auth:sanctum'])->group(function () {
-
     Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('flights', [FlightController::class, 'store']);
         Route::put('flights/{id}', [FlightController::class, "update"]);
@@ -51,11 +50,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::middleware(['auth', 'role:passenger'])->group(function () {
         Route::post("tickets", [TicketController::class, 'store']);
+        Route::post("/charge", [StripeController::class, "createCharge"]) ;
+        Route::post("/charge/store", [StripeController::class, "store"]) ;
     });
 });
 
 // stripe 
-Route::post("/charge", [StripeController::class, "createCharge"]) ;
 
 
 // Flights CRUD ;

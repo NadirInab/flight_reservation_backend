@@ -44,11 +44,6 @@ class UserController extends Controller
     }
 
 
-    public function getPlaintextPasswordAttribute()
-    {
-        return Hash::make($this->password);
-    }
-
     /**
      * Update the specified resource in storage.
      *
@@ -73,7 +68,7 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $user->delete();
-        return response()->json(['user' => $user], 204);
+        return response()->json(['user' => $id], 204);
     }
 
      /**
