@@ -12,6 +12,9 @@ class StripeController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'amount' => 'required'
+        ]) ;
         $payment = new Payment();
         $payment->amount = $request->amount;
         $payment->save();
@@ -22,12 +25,20 @@ class StripeController extends Controller
 
     public function createCharge(Request $request)
     {
+        $request->validate([
+            'cardNumber' => 'required|string',
+            'expiry' => 'required|regex:/^\d{2}\/\d{4}$/',
+            'cvc' => 'required|string',
+            'amount' => 'required|numeric|min:0.01',
+        ]);
+
         $parts = explode('/', $request->expiry);
         $exp_month = (int) $parts[0];
         $exp_year = (int) $parts[1];
         $cardNumber = $request->cardNumber;
-        $cvv = $request->cvv;
-        $amount = $request->amount;
+        $cvc = $request->cvc;
+        $amount = (int) $request->amount * 100;
+        $parts = explode('/', $request->expiry);
 
         try {
             $stripe = new \Stripe\StripeClient(
@@ -38,7 +49,7 @@ class StripeController extends Controller
                     'number' => $cardNumber,
                     'exp_month' => $exp_month,
                     'exp_year' => $exp_year,
-                    'cvc' => $cvv,
+                    'cvc' => $cvc,
                 ],
             ]);
             $stripe = new \Stripe\StripeClient(
@@ -46,13 +57,13 @@ class StripeController extends Controller
             );
             $response = $stripe->charges->create([
                 'amount' => $amount,
-                'currency' => 'usd',
+                'currency' => 'mad',
                 'source' => $res->id,
                 'description' => "Payement is well done",
             ]);
             return response()->json([
                 'response' => $response->status
-            ], 200);
+            ]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'error' => $e->getMessage()]);
         }

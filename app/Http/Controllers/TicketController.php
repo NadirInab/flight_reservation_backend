@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+
 
 class TicketController extends Controller
 {
@@ -31,10 +33,6 @@ class TicketController extends Controller
         ]);
     }
 
-    public function ticketsCount(){
-        $ticketsCount = Ticket::count() ;
-        return response()->json(["ticketsCount" => $ticketsCount]) ;
-    }
 
     public function getUserTickets($id){
         $userTicket = Ticket::where("user_id" , $id)->get() ;
@@ -48,5 +46,23 @@ class TicketController extends Controller
             "ticket" => $ticket, 
             "message" => "ticket has been deleted successfully" 
         ]) ;
+    }
+
+    public function sendImageToEmail(Request $request)
+    {
+        $image = $request->file('image');
+        $path = $image->store('images');
+
+        $email = 'inabnadir313@gmail.com';
+        // $email2 = 'nadir.inab.dev@gmail.com';
+
+        Mail::send([], [], function ($message) use ($path, $email) {
+            $message->to($email)
+                ->subject('Ticket')
+                ->from('nadir.inab.dev@gmail.com', 'Nadir')
+                ->attach(storage_path('app/' . $path));
+        });
+
+        return response()->json(['success' => true]);
     }
 }

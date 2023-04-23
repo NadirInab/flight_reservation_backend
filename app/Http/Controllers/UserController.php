@@ -68,7 +68,9 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $user->delete();
-        return response()->json(['user' => $id], 204);
+        return response()->json([
+            "user" => $user
+        ]) ;
     }
 
      /**
@@ -76,9 +78,9 @@ class UserController extends Controller
      *
      * @return int
      */
-    public function countUsers()
+    public function searchForUser($name)
     {
-        $userCount = User::count();
-        return response()->json(['count' => $userCount]);
+        $user = User::Where("name", "LIKE", "%$name%")->withCount('tickets')->with("roles")->get();
+        return response()->json(['user' => $user]);
     }
 }

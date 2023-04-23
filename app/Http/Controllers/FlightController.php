@@ -29,6 +29,20 @@ class FlightController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'from_city' => 'required|string',
+            'from_airport' => 'required|string',
+            'from_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'to_city' => 'required|string',
+            'to_airport' => 'required|string',
+            'to_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'flight_name' => 'required|string',
+            'date' => 'required|date_format:Y-m-d',
+            'airline' => 'required|string',
+            'aircraft' => 'required|string',
+            'seats' => 'required|integer|min:1',
+            'price' => 'required|numeric|min:0.01',
+        ]);
         $img1 = $request->file("from_image")->getClientOriginalName();
         $img2 = $request->file("to_image")->getClientOriginalName();
         $fromCity = City::firstOrCreate(['cityName' => $request->from_city], ['airport' => $request->from_airport, 'cityImage' => $img1]);
@@ -47,7 +61,7 @@ class FlightController extends Controller
         $flight->departureCity()->associate($fromCity);
         $flight->arrivalCity()->associate($toCity);
         $flight->save();
-        
+
         return response()->json($flight, 200);
     }
 
@@ -60,12 +74,12 @@ class FlightController extends Controller
     public function show($id)
     {
         return Flight::join('cities as from_city', 'flights.from', '=', 'from_city.cityName')
-        ->join('cities as to_city', 'flights.to', '=', 'to_city.cityName')
-        ->select('flights.id', 'flights.flight_name', 'flights.date', 'flights.airline', "flights.price", "flights.number_of_seats", 'from_city.cityName as from_city', 'from_city.airport as from_airport', 'from_city.cityImage as from_image', 'to_city.cityName as to_city', 'to_city.airport as to_airport', 'to_city.cityImage as to_image')
-        ->where('flights.id', '=', $id)
-        ->get();
+            ->join('cities as to_city', 'flights.to', '=', 'to_city.cityName')
+            ->select('flights.id', 'flights.flight_name', 'flights.date', 'flights.airline', "flights.price", "flights.number_of_seats", 'from_city.cityName as from_city', 'from_city.airport as from_airport', 'from_city.cityImage as from_image', 'to_city.cityName as to_city', 'to_city.airport as to_airport', 'to_city.cityImage as to_image')
+            ->where('flights.id', '=', $id)
+            ->get();
         return response()->json([
-            "flight" => "hi", 
+            "flight" => "hi",
         ], 200);
     }
 
@@ -122,11 +136,6 @@ class FlightController extends Controller
             ->where('to', $to)
             ->whereDate('date', $date)
             ->get();
-
-        //    return Flight::join('cities as from_city', 'flights.from', '=', 'from_city.cityName')
-        //     ->join('cities as to_city', 'flights.to', '=', 'to_city.cityName')
-        //     ->select('flights.id', 'flights.flight_name', 'flights.date', 'flights.airline', "flights.price", "flights.number_of_seats", 'from_city.cityName as from_city', 'from_city.airport as from_airport', 'to_city.cityName as to_city', 'to_city.airport as to_airport')
-        //     ->get();
     }
 
 
@@ -137,7 +146,6 @@ class FlightController extends Controller
     }
 
 
-
     public function getByAirport($airport)
     {
         $flights = Flight::where('airport', 'LIKE', "%$airport%")->get();
@@ -145,18 +153,18 @@ class FlightController extends Controller
     }
 
 
-    public function getCity()
+    public function searchByDate($date)
     {
-        // $flights = Flight::all() ;
-        $flights = Flight::join('cities as departure', 'flights.from', '=', 'departure.cityName')
-            ->join('cities as arrival', 'flights.to', '=', 'arrival.cityName')
-            ->select('flights.flight_name', 'flights.date', 'departure.cityName as departure_city', 'departure.image as departure_image', 'arrival.cityName as arrival_city', 'arrival.image as arrival_image')
+        $flight =  Flight::join('cities as from_city', 'flights.from', '=', 'from_city.cityName')
+            ->join('cities as to_city', 'flights.to', '=', 'to_city.cityName')
+            ->select('flights.id', 'flights.flight_name', 'flights.date', 'flights.airline', "flights.price", "flights.number_of_seats", 'from_city.cityName as from_city', 'from_city.airport as from_airport', 'from_city.cityImage as from_image', 'to_city.cityName as to_city', 'to_city.airport as to_airport', 'to_city.cityImage as to_image')
+            ->where("flights.date", "LIKE", "%$date%")
             ->get();
 
-        return response()->json($flights);
+        return response()->json($flight);
     }
 
-     /**
+    /**
      * Count the number of users in the database.
      *
      * @return int

@@ -23,7 +23,7 @@ class AuthController extends Controller
             'email' => $validatedData['email'],
             'password' => bcrypt($validatedData['password']),
         ]);
-
+        $user->assignRole('passenger');
         $token = $user->createToken('auth_token')->plainTextToken;
 
         $response = [
