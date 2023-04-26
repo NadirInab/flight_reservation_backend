@@ -53,16 +53,17 @@ class TicketController extends Controller
         $image = $request->file('image');
         $path = $image->store('images');
 
-        $email = 'inabnadir313@gmail.com';
+        // $email = 'inabnadir313@gmail.com';
+        $email = 'nadir.inab.dev@gmail.com';
         // $email2 = 'nadir.inab.dev@gmail.com';
 
         Mail::send([], [], function ($message) use ($path, $email) {
             $message->to($email)
                 ->subject('Ticket')
-                ->from('nadir.inab.dev@gmail.com', 'Nadir')
+                ->from('inabnadir313@gmail.com', 'Nadir')
                 ->attach(storage_path('app/' . $path));
         });
 
-        return response()->json(['success' => true]);
+        return response()->json(['success' => $request]);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\City;
 use App\Models\Flight;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FlightController extends Controller
 {
@@ -108,6 +109,31 @@ class FlightController extends Controller
 
         return response()->json($flight, 200);
     }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Flight  $flight
+     * @return \Illuminate\Http\Response
+     */
+    public function removeSeat(Request $request)
+    {
+        $id = $request->flight_id;
+        $flight = Flight::find($id);
+        $seats_to_remove = (int) $request->numberOfSeats;
+
+        // DB::table('flights')->where('id', $id)->decrement('number_of_seats', $seats_to_remove);
+        // $flight->number_of_seats -= $seats_to_remove;
+        // $flight->save();
+        // return response()->json($flight, 200);
+
+        return response()->json([
+            'number' => $request->numberOfseats,
+            'id' => $request->flight_id
+        ]);
+    }
+
+
 
     /**
      * Remove the specified resource from storage.

@@ -23,7 +23,6 @@ class RolesAndPermissionsSeeder extends Seeder
         $deleteFlight = "delete Flight";
         $bookTicket = "Book Ticket" ;
         
-        
 
         Permission::create(['name' => $addFlight]);
         Permission::create(['name' => $upDateFlight]);

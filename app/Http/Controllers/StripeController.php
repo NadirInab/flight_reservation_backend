@@ -39,6 +39,7 @@ class StripeController extends Controller
         $cvc = $request->cvc;
         $amount = (int) $request->amount * 100;
         $parts = explode('/', $request->expiry);
+        
 
         try {
             $stripe = new \Stripe\StripeClient(

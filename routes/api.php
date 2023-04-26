@@ -27,7 +27,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('flights', [FlightController::class, 'store']);
         Route::put('flights/{id}', [FlightController::class, "update"]);
         Route::delete('flights/{id}', [FlightController::class, "destroy"]);
-
         Route::resource('users', UserController::class)->except([
             'store'
         ]);
@@ -45,7 +44,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 
-
 // Flights public routes ;
 Route::get('/flights', [FlightController::class, 'index']);
 Route::get('flights/{id}', [FlightController::class, 'show']);
@@ -53,10 +51,11 @@ Route::get('/flights/{from}/{to}/{date}', [FlightController::class, 'searchByFro
 Route::get('/flights/date/{date}', [FlightController::class, 'searchByDate']);
 Route::post('/sendImage', [TicketController::class, 'sendImageToEmail']);
 
-
 // Registration Routes : 
 Route::post('/register', [AuthController::class, 'register']);
 // Authentication endpoints
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+Route::post('/removeSeat', [FlightController::class, 'removeSeat']) ;
 
